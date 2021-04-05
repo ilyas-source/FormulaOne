@@ -10,8 +10,8 @@ public class Lap implements Comparable<Lap> {
 	private Racer racer;
 
 	public Lap(LocalDateTime startDateTime, LocalDateTime endDateTime, Duration duration, Racer racer) {
-		this.startDateTime = startDateTime;
-		this.endDateTime = endDateTime;
+		this.setStartDateTime(startDateTime);
+		this.setEndDateTime(endDateTime);
 		this.racer = racer;
 		this.duration = duration;
 	}
@@ -31,5 +31,21 @@ public class Lap implements Comparable<Lap> {
 		}
 
 		return this.duration.compareTo(lap.duration);
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(LocalDateTime endDateTime) {
+		this.endDateTime = endDateTime;
+	}
+
+	public LocalDateTime getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(LocalDateTime startDateTime) {
+		this.startDateTime = startDateTime;
 	}
 }

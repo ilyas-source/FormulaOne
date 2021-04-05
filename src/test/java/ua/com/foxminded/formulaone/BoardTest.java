@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-class FormulaOneTest {
+class BoardTest {
 
 	private static final String CR = System.lineSeparator();
 
