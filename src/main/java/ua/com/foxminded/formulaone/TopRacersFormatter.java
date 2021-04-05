@@ -2,6 +2,7 @@ package ua.com.foxminded.formulaone;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
 public class TopRacersFormatter {

@@ -32,6 +32,8 @@ public class RacerRepository {
 
 		parsedRacers.sort(Comparator.comparing(Racer::getBestLapTime));
 
+		// parsedRacers.forEach(System.out::println);
+
 		return parsedRacers;
 	}
 
