@@ -3,6 +3,7 @@ package ua.com.foxminded.formulaone;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 public class Main {
@@ -10,21 +11,24 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		Properties properties = new Properties();
-		String propertiesFileName = "config.properties";
-		InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(propertiesFileName);
+		InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("config.properties");
 
 		if (inputStream != null) {
 			properties.load(inputStream);
 		} else {
-			throw new FileNotFoundException("property file '" + propertiesFileName + "' not found");
+			throw new FileNotFoundException("property file not found");
 		}
 
 		String startLogFileName = properties.getProperty("startLogFileName");
 		String endLogFileName = properties.getProperty("endLogFileName");
 		String abbrFileName = properties.getProperty("abbrFileName");
 
-		Board board = new Board();
-		System.out.println(board.build(startLogFileName, endLogFileName, abbrFileName));
+		RacerRepository racerRepositor = new RacerRepository();
+		TopRacersFormatter formatter = new TopRacersFormatter();
+
+		List<Racer> racers = racerRepositor.getRacers(startLogFileName, endLogFileName, abbrFileName);
+		System.out.println(formatter.format(racers));
+
 	}
 
 }
