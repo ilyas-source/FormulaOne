@@ -14,7 +14,6 @@ public class TopRacersFormatterTest {
 
 	@Test
 	void givenRacersList_onFormat_ThenGetString() {
-
 		StringBuilder expected = new StringBuilder();
 		expected.append("1. Sebastian Vettel  | FERRARI                   | 01:04.415").append(CR);
 		expected.append("2. Daniel Ricciardo  | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
