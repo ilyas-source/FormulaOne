@@ -92,13 +92,4 @@ public class Racer {
 			return false;
 		return true;
 	}
-
-//	@Override
-//	public String toString() {
-//
-//		// return this.abbreviation + ": " + this.teamName + ", " + this.name + ": " +
-//		// this.bestLapTime;
-//		return "expected.add(new Racer(\"" + this.abbreviation + "\", \"" + this.name + "\", \"" + this.teamName
-//				+ "\", Duration.parse(\"" + this.getBestLapTime() + "\")));";
-//	}
 }
