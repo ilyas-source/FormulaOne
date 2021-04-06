@@ -1,35 +1,28 @@
 package ua.com.foxminded.formulaone;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.sound.midi.Soundbank;
-
 import static java.util.stream.Collectors.*;
+import java.util.stream.Stream;
 
 public class RacerRepository {
 
-	public List<Racer> getRacers(String startLogFileName, String endLogFileName, String abbrFileName)
+	public List<Racer> getRacers(Stream<String> startLog, Stream<String> endLog, Stream<String> abbreviations)
 			throws IOException {
-		Map<String, LocalDateTime> startTimes = Files.readAllLines(Paths.get(startLogFileName)).stream()
-				.collect(Collectors.toMap(s -> s.substring(0, 3), s -> parseTimeDateFromString(s)));
+		Map<String, LocalDateTime> startTimes = startLog
+				.collect(toMap(s -> s.substring(0, 3), s -> parseTimeDateFromString(s)));
 
-		Map<String, LocalDateTime> endTimes = Files.readAllLines(Paths.get(endLogFileName)).stream()
-				.collect(Collectors.toMap(s -> s.substring(0, 3), s -> parseTimeDateFromString(s)));
+		Map<String, LocalDateTime> endTimes = endLog
+				.collect(toMap(s -> s.substring(0, 3), s -> parseTimeDateFromString(s)));
 
-		return Files.readAllLines(Paths.get(abbrFileName)).stream().map(this::createRacerFromString).peek(racer -> {
-			racer.setBestLapTime(
-					Duration.between(startTimes.get(racer.getAbbreviation()), endTimes.get(racer.getAbbreviation())));
+		return abbreviations.map(this::createRacerFromString).peek(racer -> {
+			LocalDateTime startTime = startTimes.get(racer.getAbbreviation());
+			LocalDateTime endTime = endTimes.get(racer.getAbbreviation());
+			racer.setBestLapTime(Duration.between(startTime, endTime));
 		}).collect(toList());
 	}
 

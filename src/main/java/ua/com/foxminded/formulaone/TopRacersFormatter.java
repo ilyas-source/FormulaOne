@@ -5,23 +5,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.IconifyAction;
+
 public class TopRacersFormatter {
 
 	private static final String CR = System.lineSeparator();
-	private static final int CUTOFF = 15;
 
-	public String format(List<Racer> racers) {
+	public String format(List<Racer> racers, int dottedLinePosition) {
 		StringBuilder result = new StringBuilder();
 
 		int maxTeamNameLength = racers.stream().mapToInt(racer -> racer.getTeamName().length()).max().getAsInt();
 		int maxRacerNameLength = racers.stream().mapToInt(racer -> racer.getName().length()).max().getAsInt();
+		int totalLineLength = maxRacerNameLength + maxTeamNameLength + 18;
 
 		racers.sort(Comparator.comparing(Racer::getBestLapTime));
 
 		int[] index = { 1 };
 
-		racers.forEach(
-				racer -> result.append(generateElement(racer, maxRacerNameLength, maxTeamNameLength, index[0]++)));
+		racers.forEach(racer -> {
+			result.append(generateElement(racer, maxRacerNameLength, maxTeamNameLength, index[0]++));
+			if (index[0] == dottedLinePosition + 1) {
+				result.append(repeatChar(totalLineLength, '-')).append(CR);
+			}
+		});
 
 		return result.toString();
 	}
@@ -43,9 +49,6 @@ public class TopRacersFormatter {
 				racer.getTeamName(), repeatChar(spacesTeam, ' '), timeOutput);
 
 		result.append(line).append(CR);
-		if (index == CUTOFF) {
-			result.append(repeatChar(line.length(), '-')).append(CR);
-		}
 		return result.toString();
 	}
 
@@ -58,5 +61,4 @@ public class TopRacersFormatter {
 
 		return builder.toString();
 	}
-
 }

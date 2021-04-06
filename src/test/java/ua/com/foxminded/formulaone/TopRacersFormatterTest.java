@@ -15,8 +15,10 @@ public class TopRacersFormatterTest {
 	@Test
 	void givenRacersList_onFormat_ThenGetString() {
 		StringBuilder expected = new StringBuilder();
+
 		expected.append("1. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
 		expected.append("2. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
+		expected.append("-----------------------------------------------------------").append(CR);
 		expected.append("3. Valtteri Bottas  | MERCEDES                  | 01:12.434").append(CR);
 
 		List<Racer> racers = new ArrayList<Racer>();
@@ -27,8 +29,7 @@ public class TopRacersFormatterTest {
 
 		TopRacersFormatter formatter = new TopRacersFormatter();
 
-		String actual = formatter.format(racers);
+		String actual = formatter.format(racers, 2);
 		assertEquals(expected.toString(), actual);
 	}
-
 }
