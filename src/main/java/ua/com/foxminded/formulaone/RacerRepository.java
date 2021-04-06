@@ -16,21 +16,19 @@ public class RacerRepository {
 	public List<Racer> getRacers(String startLogFileName, String endLogFileName, String abbrFileName)
 			throws IOException {
 		List<String> abbreviations = Files.readAllLines(Paths.get(abbrFileName));
-		List<String> startList = Files.readAllLines(Paths.get(startLogFileName));
-		List<String> endList = Files.readAllLines(Paths.get(endLogFileName));
+		List<String> startTimes = Files.readAllLines(Paths.get(startLogFileName));
+		List<String> endTimes = Files.readAllLines(Paths.get(endLogFileName));
 
 		List<Racer> parsedRacers = abbreviations.stream().map(this::createRacerFromString).collect(toList());
 
 		parsedRacers.forEach(racer -> {
-			LocalDateTime startTime = parseLapInfo(startList, racer);
-			LocalDateTime endTime = parseLapInfo(endList, racer);
+			LocalDateTime startTime = parseLapInfo(startTimes, racer);
+			LocalDateTime endTime = parseLapInfo(endTimes, racer);
 
 			Duration lapDuration = Duration.between(startTime, endTime);
 
 			racer.setBestLapTime(lapDuration);
 		});
-
-		parsedRacers.sort(Comparator.comparing(Racer::getBestLapTime));
 
 		return parsedRacers;
 	}

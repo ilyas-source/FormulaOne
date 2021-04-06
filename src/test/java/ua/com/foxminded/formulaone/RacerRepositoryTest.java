@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -51,10 +53,13 @@ public class RacerRepositoryTest {
 		expected.add(new Racer("MES", "Marcus Ericsson", "SAUBER FERRARI", Duration.parse("PT1M13.265S")));
 		expected.add(new Racer("LSW", "Lance Stroll", "WILLIAMS MERCEDES", Duration.parse("PT1M13.323S")));
 		expected.add(new Racer("KMH", "Kevin Magnussen", "HAAS FERRARI", Duration.parse("PT1M13.393S")));
+		expected.sort(Comparator.comparing(Racer::getBestLapTime));
 
 		List<Racer> actual = racerRepositor.getRacers(startLogFileName, endLogFileName, abbrFileName);
+		actual.sort(Comparator.comparing(Racer::getBestLapTime));
 
 		assertEquals(expected, actual);
+
 	}
 
 }

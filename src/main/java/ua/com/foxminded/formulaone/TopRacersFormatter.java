@@ -8,12 +8,15 @@ import java.util.List;
 public class TopRacersFormatter {
 
 	private static final String CR = System.lineSeparator();
+	private static final int CUTOFF = 15;
 
 	public String format(List<Racer> racers) {
 		StringBuilder result = new StringBuilder();
 
 		int maxTeamNameLength = racers.stream().mapToInt(racer -> racer.getTeamName().length()).max().getAsInt();
 		int maxRacerNameLength = racers.stream().mapToInt(racer -> racer.getName().length()).max().getAsInt();
+
+		racers.sort(Comparator.comparing(Racer::getBestLapTime));
 
 		int[] index = { 1 };
 
@@ -40,7 +43,7 @@ public class TopRacersFormatter {
 				racer.getTeamName(), repeatChar(spacesTeam, ' '), timeOutput);
 
 		result.append(line).append(CR);
-		if (index == 15) {
+		if (index == CUTOFF) {
 			result.append(repeatChar(line.length(), '-')).append(CR);
 		}
 		return result.toString();
