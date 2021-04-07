@@ -3,7 +3,6 @@ package ua.com.foxminded.formulaone;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -34,6 +33,7 @@ public class RacerRepositoryTest {
 				"SVF_Sebastian Vettel_FERRARI", "LHM_Lewis Hamilton_MERCEDES");
 
 		List<Racer> actual = repository.getRacers(startLog, endLog, abbreviations);
+
 		actual.sort(Comparator.comparing(Racer::getBestLapTime));
 
 		assertEquals(expected, actual);

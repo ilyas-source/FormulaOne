@@ -13,20 +13,22 @@ public class RacerRepository {
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
 
 	public List<Racer> getRacers(Stream<String> startLog, Stream<String> endLog, Stream<String> abbreviations) {
-
 		Map<String, LocalDateTime> startTimes = collectDatesTimes(startLog);
 		Map<String, LocalDateTime> endTimes = collectDatesTimes(endLog);
 
-		return abbreviations.map(this::createRacer).peek(racer -> {
-			LocalDateTime startTime = startTimes.get(racer.getAbbreviation());
-			LocalDateTime endTime = endTimes.get(racer.getAbbreviation());
-			racer.setBestLapTime(Duration.between(startTime, endTime));
-		}).collect(toList());
+		return abbreviations.map(a -> createRacer(a, startTimes, endTimes)).collect(toList());
 	}
 
-	public Racer createRacer(String string) {
+	private Racer createRacer(String string, Map<String, LocalDateTime> startTimes,
+			Map<String, LocalDateTime> endTimes) {
 		String[] params = string.split("_");
-		return new Racer(params[0], params[1], params[2]);
+		Racer racer = new Racer(params[0], params[1], params[2]);
+
+		LocalDateTime startTime = startTimes.get(racer.getAbbreviation());
+		LocalDateTime endTime = endTimes.get(racer.getAbbreviation());
+		racer.setBestLapTime(Duration.between(startTime, endTime));
+
+		return racer;
 	}
 
 	private LocalDateTime parseDateTime(String dateTime) {
