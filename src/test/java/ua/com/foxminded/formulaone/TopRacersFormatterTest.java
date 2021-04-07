@@ -12,6 +12,8 @@ public class TopRacersFormatterTest {
 
 	private static final String CR = System.lineSeparator();
 
+	TopRacersFormatter formatter = new TopRacersFormatter();
+
 	@Test
 	void givenRacersList_onFormat_ThenGetString() {
 		StringBuilder expected = new StringBuilder();
@@ -27,9 +29,8 @@ public class TopRacersFormatterTest {
 		racers.add(new Racer("DRR", "Daniel Ricciardo", "RED BULL RACING TAG HEUER", Duration.parse("PT1M12.013S")));
 		racers.add(new Racer("VBM", "Valtteri Bottas", "MERCEDES", Duration.parse("PT1M12.434S")));
 
-		TopRacersFormatter formatter = new TopRacersFormatter();
-
 		String actual = formatter.format(racers, 2);
+
 		assertEquals(expected.toString(), actual);
 	}
 }

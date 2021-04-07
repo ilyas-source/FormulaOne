@@ -3,6 +3,10 @@ package ua.com.foxminded.formulaone;
 import java.time.Duration;
 
 public class Racer {
+
+	private String abbreviation;
+	private Duration bestLapTime;
+
 	private String name;
 	private String teamName;
 
@@ -13,9 +17,6 @@ public class Racer {
 	public String getTeamName() {
 		return teamName;
 	}
-
-	private String abbreviation;
-	private Duration bestLapTime;
 
 	public Racer(String abbreviation, String name, String teamName) {
 		this.abbreviation = abbreviation;
