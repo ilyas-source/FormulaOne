@@ -15,7 +15,7 @@ public class TopRacersFormatterTest {
 	TopRacersFormatter formatter = new TopRacersFormatter();
 
 	@Test
-	void givenRacersList_onFormat_ThenGetString() {
+	void given3RacersWith2TopRacers_onFormat_ThenGetString() {
 		StringBuilder expected = new StringBuilder();
 
 		expected.append("1. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
@@ -30,6 +30,41 @@ public class TopRacersFormatterTest {
 		racers.add(new Racer("VBM", "Valtteri Bottas", "MERCEDES", Duration.parse("PT1M12.434S")));
 
 		String actual = formatter.format(racers, 2);
+
+		assertEquals(expected.toString(), actual);
+	}
+
+	@Test
+	void given2RacersWith2TopRacers_onFormat_ThenGetString() {
+		StringBuilder expected = new StringBuilder();
+
+		expected.append("1. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
+		expected.append("2. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
+		expected.append("-----------------------------------------------------------").append(CR);
+
+		List<Racer> racers = new ArrayList<Racer>();
+
+		racers.add(new Racer("SVF", "Sebastian Vettel", "FERRARI", Duration.parse("PT1M4.415S")));
+		racers.add(new Racer("DRR", "Daniel Ricciardo", "RED BULL RACING TAG HEUER", Duration.parse("PT1M12.013S")));
+
+		String actual = formatter.format(racers, 2);
+
+		assertEquals(expected.toString(), actual);
+	}
+
+	@Test
+	void given2RacersWith3TopRacers_onFormat_ThenGetString() {
+		StringBuilder expected = new StringBuilder();
+
+		expected.append("1. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
+		expected.append("2. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
+
+		List<Racer> racers = new ArrayList<Racer>();
+
+		racers.add(new Racer("SVF", "Sebastian Vettel", "FERRARI", Duration.parse("PT1M4.415S")));
+		racers.add(new Racer("DRR", "Daniel Ricciardo", "RED BULL RACING TAG HEUER", Duration.parse("PT1M12.013S")));
+
+		String actual = formatter.format(racers, 3);
 
 		assertEquals(expected.toString(), actual);
 	}

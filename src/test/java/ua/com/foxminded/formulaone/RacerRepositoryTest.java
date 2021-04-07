@@ -3,6 +3,7 @@ package ua.com.foxminded.formulaone;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,9 +13,10 @@ import org.junit.jupiter.api.Test;
 
 public class RacerRepositoryTest {
 
+	RacerRepository repository = new RacerRepository();
+
 	@Test
 	void givenStreams_onGetRacers_thenGetList() throws IOException {
-		RacerRepository racerRepositor = new RacerRepository();
 		List<Racer> expected = new ArrayList<Racer>();
 
 		expected.add(new Racer("SVF", "Sebastian Vettel", "FERRARI", Duration.parse("PT1M4.415S")));
@@ -31,9 +33,34 @@ public class RacerRepositoryTest {
 		Stream<String> abbreviations = Stream.of("DRR_Daniel Ricciardo_RED BULL RACING TAG HEUER",
 				"SVF_Sebastian Vettel_FERRARI", "LHM_Lewis Hamilton_MERCEDES");
 
-		List<Racer> actual = racerRepositor.getRacers(startLog, endLog, abbreviations);
+		List<Racer> actual = repository.getRacers(startLog, endLog, abbreviations);
 		actual.sort(Comparator.comparing(Racer::getBestLapTime));
 
 		assertEquals(expected, actual);
 	}
+
+	@Test
+	void givenEmptyStartLog_onGetRacers_thenThrowsException() {
+		Stream<String> startLog = Stream.of("");
+		Stream<String> endLog = Stream.of("MES2018-05-24_12:05:58.778", "RGH2018-05-24_12:06:27.441");
+		Stream<String> abbreviations = Stream.of("MES_Marcus Ericsson_SAUBER FERRARI",
+				"RGH_Romain Grosjean_HAAS FERRARI");
+
+		assertThrows(StringIndexOutOfBoundsException.class, () -> {
+			repository.getRacers(startLog, endLog, abbreviations);
+		});
+	}
+
+	@Test
+	void givenDifferentSizes_getRacers_thenNullPointerException() {
+		Stream<String> startLog = Stream.of("MES2018-05-24_12:04:45.513");
+		Stream<String> endLog = Stream.of("MES2018-05-24_12:05:58.778", "RGH2018-05-24_12:06:27.441");
+		Stream<String> abbreviations = Stream.of("MES_Marcus Ericsson_SAUBER FERRARI",
+				"RGH_Romain Grosjean_HAAS FERRARI");
+
+		assertThrows(NullPointerException.class, () -> {
+			repository.getRacers(startLog, endLog, abbreviations);
+		});
+	}
+
 }

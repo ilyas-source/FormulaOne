@@ -1,6 +1,5 @@
 package ua.com.foxminded.formulaone;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +10,7 @@ import java.util.stream.Stream;
 
 public class RacerRepository {
 
-	private static final String DATE_TIME_PATTERN = "yyyy-MM-dd_HH:mm:ss.SSS";
+	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
 
 	public List<Racer> getRacers(Stream<String> startLog, Stream<String> endLog, Stream<String> abbreviations) {
 		Map<String, LocalDateTime> startTimes = startLog
@@ -33,6 +32,6 @@ public class RacerRepository {
 	}
 
 	private LocalDateTime parseTimeDateFromString(String dateTime) {
-		return LocalDateTime.parse(dateTime.substring(3), DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+		return LocalDateTime.parse(dateTime.substring(3), formatter);
 	}
 }
