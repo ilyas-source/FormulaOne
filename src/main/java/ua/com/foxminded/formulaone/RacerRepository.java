@@ -13,11 +13,9 @@ public class RacerRepository {
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
 
 	public List<Racer> getRacers(Stream<String> startLog, Stream<String> endLog, Stream<String> abbreviations) {
-		Map<String, LocalDateTime> startTimes = startLog
-				.collect(toMap(s -> s.substring(0, 3), s -> parseTimeDateFromString(s)));
 
-		Map<String, LocalDateTime> endTimes = endLog
-				.collect(toMap(s -> s.substring(0, 3), s -> parseTimeDateFromString(s)));
+		Map<String, LocalDateTime> startTimes = collectDatesTimes(startLog);
+		Map<String, LocalDateTime> endTimes = collectDatesTimes(endLog);
 
 		return abbreviations.map(this::createRacer).peek(racer -> {
 			LocalDateTime startTime = startTimes.get(racer.getAbbreviation());
@@ -31,7 +29,11 @@ public class RacerRepository {
 		return new Racer(params[0], params[1], params[2]);
 	}
 
-	private LocalDateTime parseTimeDateFromString(String dateTime) {
+	private LocalDateTime parseDateTime(String dateTime) {
 		return LocalDateTime.parse(dateTime.substring(3), formatter);
+	}
+
+	private Map<String, LocalDateTime> collectDatesTimes(Stream<String> dateTimeLog) {
+		return dateTimeLog.collect(toMap(s -> s.substring(0, 3), s -> parseDateTime(s)));
 	}
 }
