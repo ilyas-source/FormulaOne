@@ -6,6 +6,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import static java.util.stream.Collectors.*;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class RacerRepository {
@@ -13,11 +19,26 @@ public class RacerRepository {
 	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd_HH:mm:ss.SSS";
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-	public List<Racer> getRacers(Stream<String> startLog, Stream<String> endLog, Stream<String> abbreviations) {
-		Map<String, LocalDateTime> startTimes = collectDatesTimes(startLog);
-		Map<String, LocalDateTime> endTimes = collectDatesTimes(endLog);
+	public List<Racer> getRacers(String startLogFileName, String endLogFileName, String abbreviationsFileName)
+			throws IOException, URISyntaxException {
+		URL startTimesUrl = Thread.currentThread().getContextClassLoader().getResource(startLogFileName);
+		URL endTimesUrl = Thread.currentThread().getContextClassLoader().getResource(endLogFileName);
+		URL abbreviationsUrl = Thread.currentThread().getContextClassLoader().getResource(abbreviationsFileName);
 
-		return abbreviations.map(a -> createRacer(a, startTimes, endTimes)).collect(toList());
+		Stream<String> startTimesData = Files.lines(Paths.get(startTimesUrl.toURI()));
+		Stream<String> endTimesData = Files.lines(Paths.get(endTimesUrl.toURI()));
+		Stream<String> abbreviations = Files.lines(Paths.get(abbreviationsUrl.toURI()));
+
+		Map<String, LocalDateTime> startTimes = collectDatesTimes(startTimesData);
+		Map<String, LocalDateTime> endTimes = collectDatesTimes(endTimesData);
+
+		try {
+			return abbreviations.map(a -> createRacer(a, startTimes, endTimes)).collect(toList());
+		} finally {
+			startTimesData.close();
+			endTimesData.close();
+			abbreviations.close();
+		}
 	}
 
 	private Racer createRacer(String abbreviationLine, Map<String, LocalDateTime> startTimes,
