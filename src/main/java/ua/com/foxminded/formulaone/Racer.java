@@ -5,18 +5,9 @@ import java.time.Duration;
 public class Racer {
 
 	private String abbreviation;
-	private Duration bestLapTime;
-
 	private String name;
 	private String teamName;
-
-	public String getName() {
-		return name;
-	}
-
-	public String getTeamName() {
-		return teamName;
-	}
+	private Duration bestLapTime;
 
 	public Racer(String abbreviation, String name, String teamName) {
 		this.abbreviation = abbreviation;
@@ -33,6 +24,14 @@ public class Racer {
 
 	public String getAbbreviation() {
 		return abbreviation;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getTeamName() {
+		return teamName;
 	}
 
 	public Duration getBestLapTime() {

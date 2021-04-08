@@ -11,7 +11,7 @@ public class TopRacersFormatter {
 
 	private static final String CR = System.lineSeparator();
 
-	public String format(List<Racer> racers, int dottedLinePosition) {
+	public String format(List<Racer> racers, int topRacersNumber) {
 		StringBuilder result = new StringBuilder();
 
 		int maxTeamNameLength = racers.stream().mapToInt(racer -> racer.getTeamName().length()).max().getAsInt();
@@ -24,7 +24,7 @@ public class TopRacersFormatter {
 
 		racers.forEach(racer -> {
 			result.append(generateElement(racer, maxRacerNameLength, maxTeamNameLength, index[0]++));
-			if (index[0] == dottedLinePosition + 1) {
+			if (index[0] == topRacersNumber + 1) {
 				result.append(repeatChar(totalLineLength, '-')).append(CR);
 			}
 		});

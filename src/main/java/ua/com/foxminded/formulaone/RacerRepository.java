@@ -10,7 +10,8 @@ import java.util.stream.Stream;
 
 public class RacerRepository {
 
-	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd_HH:mm:ss.SSS";
+	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
 	public List<Racer> getRacers(Stream<String> startLog, Stream<String> endLog, Stream<String> abbreviations) {
 		Map<String, LocalDateTime> startTimes = collectDatesTimes(startLog);
@@ -19,10 +20,10 @@ public class RacerRepository {
 		return abbreviations.map(a -> createRacer(a, startTimes, endTimes)).collect(toList());
 	}
 
-	private Racer createRacer(String string, Map<String, LocalDateTime> startTimes,
+	private Racer createRacer(String abbreviationLine, Map<String, LocalDateTime> startTimes,
 			Map<String, LocalDateTime> endTimes) {
-		String[] params = string.split("_");
-		Racer racer = new Racer(params[0], params[1], params[2]);
+		String[] racerData = abbreviationLine.split("_");
+		Racer racer = new Racer(racerData[0], racerData[1], racerData[2]);
 
 		LocalDateTime startTime = startTimes.get(racer.getAbbreviation());
 		LocalDateTime endTime = endTimes.get(racer.getAbbreviation());
