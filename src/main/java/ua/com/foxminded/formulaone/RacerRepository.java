@@ -16,8 +16,7 @@ import java.util.stream.Stream;
 
 public class RacerRepository {
 
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd_HH:mm:ss.SSS";
-	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
 
 	public List<Racer> getRacers(String startLogFileName, String endLogFileName, String abbreviationsFileName)
 			throws IOException, URISyntaxException {
@@ -54,7 +53,7 @@ public class RacerRepository {
 	}
 
 	private LocalDateTime parseDateTime(String dateTime) {
-		return LocalDateTime.parse(dateTime.substring(3), formatter);
+		return LocalDateTime.parse(dateTime.substring(3), FORMATTER);
 	}
 
 	private Map<String, LocalDateTime> collectDatesTimes(Stream<String> dateTimeLog) {
