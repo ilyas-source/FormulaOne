@@ -2,10 +2,8 @@ package ua.com.foxminded.formulaone;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
+import static java.util.Comparator.comparing;
 import java.util.List;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.IconifyAction;
 
 public class TopRacersFormatter {
 
@@ -18,11 +16,8 @@ public class TopRacersFormatter {
 		int maxRacerNameLength = racers.stream().mapToInt(racer -> racer.getName().length()).max().getAsInt();
 		int totalLineLength = maxRacerNameLength + maxTeamNameLength + 18;
 
-		racers.sort(Comparator.comparing(Racer::getBestLapTime));
-
 		int[] index = { 1 };
-
-		racers.forEach(racer -> {
+		racers.stream().sorted(comparing(Racer::getBestLapTime)).forEach(racer -> {
 			result.append(generateElement(racer, maxRacerNameLength, maxTeamNameLength, index[0]++));
 			if (index[0] == topRacersNumber + 1) {
 				result.append(repeatChar(totalLineLength, '-')).append(CR);
