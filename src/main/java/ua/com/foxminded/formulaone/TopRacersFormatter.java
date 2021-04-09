@@ -18,7 +18,7 @@ public class TopRacersFormatter {
 
 		int[] index = { 1 };
 		racers.stream().sorted(comparing(Racer::getBestLapTime)).forEach(racer -> {
-			result.append(generateElement(racer, maxRacerNameLength, maxTeamNameLength, index[0]++));
+			result.append(formatRacer(racer, maxRacerNameLength, maxTeamNameLength, index[0]++));
 			if (index[0] == topRacersNumber + 1) {
 				result.append(repeatChar(totalLineLength, '-')).append(CR);
 			}
@@ -27,7 +27,7 @@ public class TopRacersFormatter {
 		return result.toString();
 	}
 
-	public String generateElement(Racer racer, int maxRacerNameLength, int maxTeamNameLength, int index) {
+	public String formatRacer(Racer racer, int maxRacerNameLength, int maxTeamNameLength, int index) {
 		StringBuilder result = new StringBuilder();
 
 		LocalTime time = LocalTime.ofNanoOfDay(racer.getBestLapTime().toNanos());

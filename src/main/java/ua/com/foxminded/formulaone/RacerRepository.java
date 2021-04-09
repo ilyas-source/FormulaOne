@@ -8,11 +8,14 @@ import java.util.Map;
 import static java.util.stream.Collectors.*;
 
 import java.io.IOException;
+import java.lang.invoke.StringConcatFactory;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
+import javax.management.loading.PrivateClassLoader;
 
 public class RacerRepository {
 
@@ -20,13 +23,10 @@ public class RacerRepository {
 
 	public List<Racer> getRacers(String startLogFileName, String endLogFileName, String abbreviationsFileName)
 			throws IOException, URISyntaxException {
-		URL startTimesUrl = Thread.currentThread().getContextClassLoader().getResource(startLogFileName);
-		URL endTimesUrl = Thread.currentThread().getContextClassLoader().getResource(endLogFileName);
-		URL abbreviationsUrl = Thread.currentThread().getContextClassLoader().getResource(abbreviationsFileName);
 
-		Stream<String> startTimesData = Files.lines(Paths.get(startTimesUrl.toURI()));
-		Stream<String> endTimesData = Files.lines(Paths.get(endTimesUrl.toURI()));
-		Stream<String> abbreviations = Files.lines(Paths.get(abbreviationsUrl.toURI()));
+		Stream<String> startTimesData = getStreamFromFileName(startLogFileName);
+		Stream<String> endTimesData = getStreamFromFileName(endLogFileName);
+		Stream<String> abbreviations = getStreamFromFileName(abbreviationsFileName);
 
 		Map<String, LocalDateTime> startTimes = collectDatesTimes(startTimesData);
 		Map<String, LocalDateTime> endTimes = collectDatesTimes(endTimesData);
@@ -58,5 +58,10 @@ public class RacerRepository {
 
 	private Map<String, LocalDateTime> collectDatesTimes(Stream<String> dateTimeLog) {
 		return dateTimeLog.collect(toMap(s -> s.substring(0, 3), s -> parseDateTime(s)));
+	}
+
+	private Stream<String> getStreamFromFileName(String fileName) throws IOException, URISyntaxException {
+		URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
+		return Files.lines(Paths.get(url.toURI()));
 	}
 }
