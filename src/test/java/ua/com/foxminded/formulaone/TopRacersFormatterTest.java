@@ -30,6 +30,8 @@ public class TopRacersFormatterTest {
 		racers.add(new Racer("VBM", "Valtteri Bottas", "MERCEDES", Duration.parse("PT1M12.434S")));
 
 		String actual = formatter.format(racers, 2);
+		System.out.println(actual);
+		System.out.println(expected.toString());
 
 		assertEquals(expected.toString(), actual);
 	}

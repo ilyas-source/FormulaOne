@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import static java.util.Comparator.comparing;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 public class TopRacersFormatter {
 
@@ -12,39 +14,31 @@ public class TopRacersFormatter {
 	public String format(List<Racer> racers, int topRacersNumber) {
 		StringBuilder result = new StringBuilder();
 
-		int maxTeamNameLength = racers.stream().mapToInt(racer -> racer.getTeamName().length()).max().getAsInt();
-		int maxRacerNameLength = racers.stream().mapToInt(racer -> racer.getName().length()).max().getAsInt();
-		int totalLineLength = maxRacerNameLength + maxTeamNameLength + 18;
+		int maxRacerNameLength = getMaxFieldLength(racers, Racer::getName);
+		int maxTeamNameLength = getMaxFieldLength(racers, Racer::getTeamName);
 
-		int[] index = { 1 };
+		AtomicInteger index = new AtomicInteger(0);
+		String racerFormat = "%1$02d. %2$-" + maxRacerNameLength + "s | %3$-" + maxTeamNameLength + "s | ";
 		racers.stream().sorted(comparing(Racer::getBestLapTime)).forEach(racer -> {
-			result.append(formatRacer(racer, maxRacerNameLength, maxTeamNameLength, index[0]++));
-			if (index[0] == topRacersNumber + 1) {
-				result.append(repeatChar(totalLineLength, '-')).append(CR);
+			String formattedRacer = formatRacer(racer, racerFormat, index.addAndGet(1));
+			result.append(formattedRacer);
+			if (index.get() == topRacersNumber) {
+				result.append(repeatChar(formattedRacer.length() - 2, '-')).append(CR);
 			}
 		});
 
 		return result.toString();
 	}
 
-	public String formatRacer(Racer racer, int maxRacerNameLength, int maxTeamNameLength, int index) {
-		StringBuilder result = new StringBuilder();
+	private int getMaxFieldLength(List<Racer> racers, Function<Racer, String> getter) {
+		return racers.stream().mapToInt(racer -> getter.apply(racer).length()).max().getAsInt();
+	}
 
+	public String formatRacer(Racer racer, String racerFormat, int index) {
 		LocalTime time = LocalTime.ofNanoOfDay(racer.getBestLapTime().toNanos());
 		String timeOutput = time.format(DateTimeFormatter.ofPattern("mm:ss.SSS"));
 
-		int spacesName = maxRacerNameLength - racer.getName().length();
-		int spacesTeam = maxTeamNameLength - racer.getTeamName().length();
-
-		if (index > 9) {
-			spacesName--;
-		}
-
-		String line = String.format("%d. %s%s | %s%s | %s", index, racer.getName(), repeatChar(spacesName, ' '),
-				racer.getTeamName(), repeatChar(spacesTeam, ' '), timeOutput);
-
-		result.append(line).append(CR);
-		return result.toString();
+		return String.format(racerFormat, index, racer.getName(), racer.getTeamName()) + timeOutput + CR;
 	}
 
 	private String repeatChar(int length, char ch) {
