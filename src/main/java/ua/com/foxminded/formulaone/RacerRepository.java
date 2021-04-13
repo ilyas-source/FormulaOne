@@ -49,7 +49,7 @@ public class RacerRepository {
 	}
 
 	private Map<String, LocalDateTime> collectDatesTimes(Stream<String> dateTimeLog) {
-		return dateTimeLog.collect(toMap(s -> s.substring(0, 3), s -> parseDateTime(s)));
+		return dateTimeLog.collect(toMap(s -> s.substring(0, 3), this::parseDateTime));
 	}
 
 	private Stream<String> getStreamFromFile(String fileName) throws IOException, URISyntaxException {

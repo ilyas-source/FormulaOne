@@ -4,12 +4,17 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import static java.util.Comparator.comparing;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class TopRacersFormatter {
 
 	private static final String CR = System.lineSeparator();
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("mm:ss.SSS");
 
 	public String format(List<Racer> racers, int topRacersNumber) {
 		StringBuilder result = new StringBuilder();
@@ -31,23 +36,29 @@ public class TopRacersFormatter {
 	}
 
 	private int getMaxFieldLength(List<Racer> racers, Function<Racer, String> getter) {
-		return racers.stream().mapToInt(racer -> getter.apply(racer).length()).max().getAsInt();
+		// return racers.stream().mapToInt(racer ->
+		// getter.apply(racer).length()).max().getAsInt();
+		Stream<Racer> racersStream = racers.stream();
+//		IntStream lenghtsStream = racersStream.mapToInt(racer -> getter.apply(racer).length());
+		IntStream lenghtsStream = racersStream.mapToInt(racer -> getter.apply(racer).length());
+		OptionalInt maxLength = lenghtsStream.max();
+		return maxLength.getAsInt();
 	}
 
 	public String formatRacer(Racer racer, String racerFormat, int index) {
 		LocalTime time = LocalTime.ofNanoOfDay(racer.getBestLapTime().toNanos());
-		String timeOutput = time.format(DateTimeFormatter.ofPattern("mm:ss.SSS"));
+		String formattedTime = time.format(FORMATTER);
 
-		return String.format(racerFormat, index, racer.getName(), racer.getTeamName()) + timeOutput + CR;
+		return String.format(racerFormat, index, racer.getName(), racer.getTeamName()) + formattedTime + CR;
 	}
 
-	private String repeatChar(int length, char ch) {
-		StringBuilder builder = new StringBuilder();
+	private String repeatChar(int length, char character) {
+		StringBuilder result = new StringBuilder();
 
 		for (int i = 0; i < length; i++) {
-			builder.append(ch);
+			result.append(character);
 		}
 
-		return builder.toString();
+		return result.toString();
 	}
 }

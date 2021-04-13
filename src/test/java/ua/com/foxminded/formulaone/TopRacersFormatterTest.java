@@ -11,17 +11,16 @@ import org.junit.jupiter.api.Test;
 public class TopRacersFormatterTest {
 
 	private static final String CR = System.lineSeparator();
-
 	TopRacersFormatter formatter = new TopRacersFormatter();
 
 	@Test
 	void given3RacersWith2TopRacers_onFormat_ThenGetString() {
 		StringBuilder expected = new StringBuilder();
 
-		expected.append("1. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
-		expected.append("2. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
-		expected.append("-----------------------------------------------------------").append(CR);
-		expected.append("3. Valtteri Bottas  | MERCEDES                  | 01:12.434").append(CR);
+		expected.append("01. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
+		expected.append("02. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
+		expected.append("------------------------------------------------------------").append(CR);
+		expected.append("03. Valtteri Bottas  | MERCEDES                  | 01:12.434").append(CR);
 
 		List<Racer> racers = new ArrayList<Racer>();
 
@@ -30,8 +29,6 @@ public class TopRacersFormatterTest {
 		racers.add(new Racer("VBM", "Valtteri Bottas", "MERCEDES", Duration.parse("PT1M12.434S")));
 
 		String actual = formatter.format(racers, 2);
-		System.out.println(actual);
-		System.out.println(expected.toString());
 
 		assertEquals(expected.toString(), actual);
 	}
@@ -40,9 +37,9 @@ public class TopRacersFormatterTest {
 	void given2RacersWith2TopRacers_onFormat_ThenGetString() {
 		StringBuilder expected = new StringBuilder();
 
-		expected.append("1. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
-		expected.append("2. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
-		expected.append("-----------------------------------------------------------").append(CR);
+		expected.append("01. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
+		expected.append("02. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
+		expected.append("------------------------------------------------------------").append(CR);
 
 		List<Racer> racers = new ArrayList<Racer>();
 
@@ -58,8 +55,8 @@ public class TopRacersFormatterTest {
 	void given2RacersWith3TopRacers_onFormat_ThenGetString() {
 		StringBuilder expected = new StringBuilder();
 
-		expected.append("1. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
-		expected.append("2. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
+		expected.append("01. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
+		expected.append("02. Daniel Ricciardo | RED BULL RACING TAG HEUER | 01:12.013").append(CR);
 
 		List<Racer> racers = new ArrayList<Racer>();
 
