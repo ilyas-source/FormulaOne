@@ -14,7 +14,7 @@ public class TopRacersFormatterTest {
 	TopRacersFormatter formatter = new TopRacersFormatter();
 
 	@Test
-	void given3RacersWith2TopRacers_onFormat_ThenGetString() {
+	void given3RacersWith2TopRacers_onFormat_ShouldReturnFormattedString() {
 		StringBuilder expected = new StringBuilder();
 
 		expected.append("01. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
@@ -34,7 +34,7 @@ public class TopRacersFormatterTest {
 	}
 
 	@Test
-	void given2RacersWith2TopRacers_onFormat_ThenGetString() {
+	void given2RacersWith2TopRacers_onFormat_ShouldReturnFormattedString() {
 		StringBuilder expected = new StringBuilder();
 
 		expected.append("01. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);
@@ -52,7 +52,7 @@ public class TopRacersFormatterTest {
 	}
 
 	@Test
-	void given2RacersWith3TopRacers_onFormat_ThenGetString() {
+	void given2RacersWith3TopRacers_onFormat_ShouldReturnFormattedString() {
 		StringBuilder expected = new StringBuilder();
 
 		expected.append("01. Sebastian Vettel | FERRARI                   | 01:04.415").append(CR);

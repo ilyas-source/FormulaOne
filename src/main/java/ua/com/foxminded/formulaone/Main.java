@@ -7,7 +7,6 @@ import java.util.List;
 public class Main {
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
-
 		RacerRepository repository = new RacerRepository();
 		TopRacersFormatter formatter = new TopRacersFormatter();
 
