@@ -36,13 +36,10 @@ public class TopRacersFormatter {
 	}
 
 	private int getMaxFieldLength(List<Racer> racers, Function<Racer, String> getter) {
-		// return racers.stream().mapToInt(racer ->
-		// getter.apply(racer).length()).max().getAsInt();
-		Stream<Racer> racersStream = racers.stream();
-//		IntStream lenghtsStream = racersStream.mapToInt(racer -> getter.apply(racer).length());
-		IntStream lenghtsStream = racersStream.mapToInt(racer -> getter.apply(racer).length());
-		OptionalInt maxLength = lenghtsStream.max();
-		return maxLength.getAsInt();
+		return racers.stream() //
+				.map(getter::apply) //
+				.mapToInt(String::length) //
+				.max().orElse(0);
 	}
 
 	public String formatRacer(Racer racer, String racerFormat, int index) {
